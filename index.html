@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📦 箱庭入夢員工室</title>
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2919/2919600.png">
+
+<style>
+  /* === 這裡決定網頁長什麼樣子 (CSS) === */
+  body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; color: #eee; font-family: "Microsoft JhengHei", sans-serif; overflow: hidden; }
+  
+  /* 左側選單欄 */
+  .sidebar {
+    width: 220px;
+    background: #252526; /* 深灰色背景 */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid #333;
+    z-index: 10;
+  }
+  
+  .logo { 
+    font-size: 22px; 
+    font-weight: bold; 
+    margin-bottom: 40px; 
+    color: #ffd700; /* 金色標題 */
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  
+  /* 按鈕樣式 */
+  button {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    padding: 15px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  button:hover { background: #333; color: white; }
+  button.active { background: #3e3e42; color: #fff; font-weight: bold; border-left: 4px solid #ffd700;}
+  
+  /* 右側全螢幕顯示區 */
+  .main-screen { flex-grow: 1; position: relative; background: #1e1e1e; }
+  
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none; /* 預設隱藏 */
+  }
+  
+  /* 歡迎畫面 */
+  .welcome {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #666;
+  }
+  
+  iframe.active { display: block; }
+</style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="logo">📦 員工室</div>
+    <button onclick="switchTab('plurk', this)">📢 發噗放送局</button>
+    <button onclick="switchTab('ship', this)">📦 發貨轉運站</button>
+    <button onclick="switchTab('point', this)">💳 集點管理處</button>
+  </div>
+
+  <div class="main-screen">
+    <div id="welcome-msg" class="welcome">
+      <h1>歡迎入夢</h1>
+      <p>請選擇左側功能開始作業</p>
+    </div>
+
+    <iframe id="plurk" src="https://script.google.com/macros/s/你的發噗ID/exec"></iframe>
+    <iframe id="ship" src="https://script.google.com/macros/s/AKfycbzBZjTBh6MqsPMczBUgnqg-wcPJSoFXtQcd_0PxZNzVJJQhPb3LuLdgRqWi7qbcnagR/exec"></iframe>
+    <iframe id="point" src="https://script.google.com/macros/s/AKfycbw-TrivYkr38qQtT3ha5Z4m9xdLveQY19dYZeWPK7fMgbePrUqWAdu-fQCHRI1Vq38-kw/exec"></iframe>
+  </div>
+
+  <script>
+    function switchTab(tabId, btnElement) {
+      document.getElementById('welcome-msg').style.display = 'none';
+      
+      // 重置所有狀態
+      document.querySelectorAll('iframe').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('button').forEach(el => el.classList.remove('active'));
+      
+      // 啟動選中的項目
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
+
+<meta name="robots" content="noindex, nofollow">
