@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   
   <title>🌙 箱庭入夢 ✶ 員工室</title>
@@ -29,6 +29,8 @@
       margin: 0; 
       display: flex; 
       height: 100vh; 
+      /* 使用 dvh (Dynamic Viewport Height) 解決手機網址列伸縮問題 */
+      height: 100dvh; 
       background-image: var(--bg-gradient);
       color: var(--text-main); 
       font-family: 'Zen Maru Gothic', sans-serif; 
@@ -42,7 +44,6 @@
       z-index: 9999;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       transition: opacity 0.5s ease;
-      /* 預設是可以看見的，但我們會用 JS 瞬間隱藏它 */
     }
     .login-box {
       background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px);
@@ -70,7 +71,7 @@
     .login-btn:active { transform: scale(0.95); }
     .error-msg { color: #ff6b6b; font-size: 14px; margin-top: 10px; display: none; }
 
-    /* === 導航選單 === */
+    /* === 導航選單 (電腦版) === */
     .sidebar {
       width: var(--sidebar-width);
       background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -100,7 +101,7 @@
     }
     button.nav-item.active i { transform: rotate(-10deg); color: #fff; text-shadow: 0 0 5px var(--accent-color); }
 
-    /* === 主畫面 === */
+    /* === 主畫面 (電腦版) === */
     .main-screen { flex-grow: 1; position: relative; }
     iframe { width: 100%; height: 100%; border: none; display: none; }
     
@@ -127,15 +128,32 @@
 
     iframe.active { display: block; }
     
+    /* === 📱 手機版專用設定 (關鍵修正) === */
     @media (max-width: 768px) {
       body { flex-direction: column; } 
+      
+      /* 1. 底部導航列：固定高度 + Safe Area */
       .sidebar {
-        position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height);
-        flex-direction: row; padding: 0; justify-content: space-around; align-items: center;
-        border-right: none; border-top: 1px solid var(--glass-border);
-        background: rgba(30, 20, 40, 0.9);
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        /* 高度 = 導航列基本高度 + 底部小白條高度 */
+        height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+        padding-bottom: env(safe-area-inset-bottom); /* 讓按鈕避開小白條 */
+        
+        flex-direction: row; 
+        padding-left: 0; padding-right: 0; 
+        justify-content: space-around; 
+        align-items: center;
+        border-right: none; 
+        border-top: 1px solid var(--glass-border);
+        background: rgba(30, 20, 40, 0.98); /* 不透明度高一點，避免混亂 */
+        box-sizing: border-box;
       }
+      
       .logo { display: none; }
+      
       button.nav-item {
         flex-direction: column; padding: 5px; margin: 0; background: transparent !important;
         color: #777; font-size: 10px; gap: 4px; border-radius: 0;
@@ -144,15 +162,27 @@
       button.nav-item i { font-size: 20px; margin-bottom: 2px; width: auto; }
       button.nav-item.active { color: var(--accent-color); background: transparent; }
       button.nav-item.active i { transform: translateY(-3px); color: var(--accent-color); text-shadow: 0 0 10px rgba(255,154,158,0.6); }
-      /* 手機版主畫面調整 */
+      
+      /* 2. 主畫面：計算高度，完全避開導航列 */
       .main-screen {
+        position: fixed; /* 固定在上方 */
+        top: 0;
+        left: 0;
         width: 100%;
-        /* 舊的寫法：height: calc(100vh - var(--bottom-nav-height)); */
-        /* 👇 改成這樣：讓 iframe 佔滿高度，但下面留白給導航列 */
-        height: 100vh; 
-        padding-bottom: var(--bottom-nav-height); /* 👈 關鍵！把底部空間讓出來 */
-        box-sizing: border-box; /* 確保 padding 不會讓寬度爆掉 */
+        /* 高度 = 螢幕總高(dvh) - (導航列高度 + 小白條) */
+        /* 這樣 iframe 絕對不會延伸到導航列後面！ */
+        height: calc(100dvh - (var(--bottom-nav-height) + env(safe-area-inset-bottom)));
+        padding-bottom: 0;
       }
+
+      /* 讓 iframe 充滿這個計算好的空間 */
+      iframe {
+        width: 100%;
+        height: 100%; 
+        display: none;
+      }
+      iframe.active { display: block; }
+
       .welcome h1 { font-size: 2rem; }
     }
   </style>
@@ -170,12 +200,11 @@
   </div>
 
   <script>
-    // 立即檢查：如果已經有通行證，直接把遮罩隱藏
-    // 這樣在瀏覽器還沒把遮罩「畫出來」之前，它就被我們藏起來了，所以不會閃爍！
     if (localStorage.getItem('staffRoomAccess') === 'granted') {
       document.getElementById('login-overlay').style.display = 'none';
     }
   </script>
+
   <div class="sidebar">
     <div class="logo">
       <i class="fa-solid fa-moon"></i>
@@ -210,7 +239,6 @@
   </div>
 
   <script>
-    // 🔑 密碼設定
     const STAFF_PASSWORD = "psdls"; 
 
     function checkPassword() {
