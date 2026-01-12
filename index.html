@@ -13,51 +13,56 @@
 
   <style>
     :root {
-      /* === 夢幻配色表 === */
-      --bg-gradient: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); /* 溫暖夕陽到夢幻紫 */
-      --glass-bg: rgba(255, 255, 255, 0.25);
-      --glass-border: rgba(255, 255, 255, 0.4);
-      --text-main: #5a4a6e; /* 深紫色文字，比黑色柔和 */
-      --text-active: #fff;
-      --accent-color: #ff9a9e; /* 蜜桃粉 */
+      /* === 🌙 深夜夢境配色 (護眼版) === */
+      /* 背景：深邃的午夜紫 -> 夢幻靛藍 */
+      --bg-gradient: linear-gradient(135deg, #241b35 0%, #4a3b69 100%);
+      
+      /* 玻璃：改用深色半透明，不再是亮白 */
+      --glass-bg: rgba(0, 0, 0, 0.3);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      
+      /* 文字：柔和的灰白 */
+      --text-main: #e0dbe6; 
+      --text-muted: #9f96ad;
+      
+      /* 強調色：螢光粉/蜜桃色 (保留可愛感) */
+      --accent-color: #ff9a9e; 
+      
       --sidebar-width: 240px;
       --bottom-nav-height: 70px;
     }
 
-    /* === 全局設定 === */
     body { 
       margin: 0; 
       display: flex; 
       height: 100vh; 
       background-image: var(--bg-gradient);
       color: var(--text-main); 
-      font-family: 'Zen Maru Gothic', sans-serif; /* 全面使用圓體 */
+      font-family: 'Zen Maru Gothic', sans-serif; 
       overflow: hidden; 
     }
     
-    /* === 導航選單 (電腦版是側邊欄，手機版是底欄) === */
+    /* === 導航選單 === */
     .sidebar {
       width: var(--sidebar-width);
       background: var(--glass-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       padding: 30px 15px;
       border-right: 1px solid var(--glass-border);
       z-index: 100;
-      box-shadow: 5px 0 30px rgba(0,0,0,0.1);
-      transition: 0.3s;
+      box-shadow: 5px 0 30px rgba(0,0,0,0.2);
     }
     
-    /* Logo 區域 */
     .logo { 
       font-size: 24px; 
       font-weight: bold;
       margin-bottom: 40px; 
       color: #fff; 
       text-align: center;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-shadow: 0 0 10px rgba(255, 154, 158, 0.5); /* 微光效果 */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -68,131 +73,108 @@
     button {
       background: transparent;
       border: none;
-      color: #fff;
+      color: var(--text-muted);
       padding: 15px 20px;
       text-align: left;
       cursor: pointer;
       font-size: 16px;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Q彈動畫 */
-      border-radius: 20px; /* 變圓 */
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      border-radius: 20px;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 12px;
       font-family: 'Zen Maru Gothic', sans-serif;
       font-weight: 700;
-      opacity: 0.8;
     }
     
     button i { font-size: 20px; transition: 0.3s; }
 
     /* 滑鼠懸停 */
     button:hover { 
-      background: rgba(255, 255, 255, 0.3); 
-      transform: scale(1.05); /* 微微放大 */
-      opacity: 1;
+      background: rgba(255, 255, 255, 0.08); /* 微微打亮 */
+      color: #fff;
+      transform: scale(1.05);
     }
 
     /* 選中狀態 */
     button.active { 
-      background: #fff; 
+      background: rgba(255, 154, 158, 0.15); /* 淡粉色背景 */
       color: var(--accent-color); 
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      opacity: 1;
+      box-shadow: 0 0 15px rgba(255, 154, 158, 0.1);
+      border: 1px solid rgba(255, 154, 158, 0.3); /* 加個細邊框增加精緻感 */
     }
 
-    button.active i { transform: rotate(-10deg); /* 圖示俏皮歪頭 */ }
+    button.active i { transform: rotate(-10deg); color: #fff; text-shadow: 0 0 5px var(--accent-color); }
 
-    /* === 右側全螢幕顯示區 === */
+    /* === 主畫面 === */
     .main-screen { 
       flex-grow: 1; 
       position: relative; 
-      background: rgba(255,255,255,0.1); /* 微微透白，增加層次 */
+      /* 讓背景透出來，不另外加色塊 */
     }
     
     iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: none;
-      border-radius: 0; /* 電腦版全螢幕 */
+      width: 100%; height: 100%; border: none; display: none;
     }
     
-    /* === 歡迎畫面 === */
     .welcome {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      color: #fff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      color: rgba(255,255,255,0.6);
     }
+    .welcome h1 { font-size: 2.5rem; margin: 0; color: #fff; }
     
-    .welcome h1 { font-size: 2.5rem; margin: 0; }
-    .welcome p { font-size: 1.1rem; opacity: 0.9; margin-top: 10px; }
-
     iframe.active { display: block; }
     
-    /* =========================================
-       📱 手機版專用設定 (關鍵！)
-       ========================================= */
+    /* === 手機版調整 === */
     @media (max-width: 768px) {
-      body { flex-direction: column; } /* 改成上下排列 */
+      body { flex-direction: column; } 
 
-      /* 側邊欄變身為「底部導航列」 */
       .sidebar {
         position: fixed;
-        bottom: 0;
-        left: 0;
+        bottom: 0; left: 0;
         width: 100%;
         height: var(--bottom-nav-height);
-        flex-direction: row; /* 水平排列 */
+        flex-direction: row;
         padding: 0;
-        justify-content: space-around; /* 平均分配間距 */
+        justify-content: space-around;
         align-items: center;
         border-right: none;
-        border-top: 1px solid rgba(255,255,255,0.5);
-        background: rgba(255, 255, 255, 0.85); /* 手機版背景白一點，比較好讀 */
-        backdrop-filter: blur(20px);
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-        box-sizing: border-box; /* 確保 padding 不會撐爆寬度 */
+        border-top: 1px solid var(--glass-border);
+        background: rgba(30, 20, 40, 0.9); /* 手機底部深色不透光一點 */
       }
 
-      /* 手機版隱藏 Logo (省空間) */
       .logo { display: none; }
 
-      /* 按鈕樣式調整 */
       button {
-        flex-direction: column; /* 圖示在字上面 */
-        padding: 5px;
-        margin: 0;
-        background: transparent !important; /* 移除背景色 */
-        color: #888;
-        font-size: 10px; /* 字變小 */
+        flex-direction: column;
+        padding: 5px; margin: 0;
+        background: transparent !important;
+        color: #777;
+        font-size: 10px;
         gap: 4px;
         border-radius: 0;
         box-shadow: none !important;
+        border: none !important;
         transform: none !important;
         width: 100%;
       }
 
       button i { font-size: 20px; margin-bottom: 2px; }
 
-      /* 手機版選中狀態 */
       button.active {
         color: var(--accent-color);
         background: transparent;
       }
-      
-      button.active i { transform: translateY(-3px); /* 選中時圖示往上跳一下 */ }
+      button.active i { transform: translateY(-3px); color: var(--accent-color); text-shadow: 0 0 10px rgba(255,154,158,0.6); }
 
-      /* 主畫面調整 */
       .main-screen {
         width: 100%;
-        height: calc(100vh - var(--bottom-nav-height)); /* 扣掉底部高度 */
+        height: calc(100vh - var(--bottom-nav-height));
       }
-      
-      /* 歡迎文字手機版小一點 */
       .welcome h1 { font-size: 1.8rem; }
     }
   </style>
@@ -201,7 +183,7 @@
 
   <div class="sidebar">
     <div class="logo">
-      <i class="fa-solid fa-cloud-moon"></i>
+      <i class="fa-solid fa-moon"></i>
       <span>箱庭入夢</span>
     </div>
     
@@ -224,7 +206,7 @@
   <div class="main-screen">
     <div id="welcome-msg" class="welcome">
       <h1>歡迎回來</h1>
-      <p>點擊選單開啟小窗</p>
+      <p>Midnight Staff Room</p>
     </div>
 
     <iframe id="plurk" src="https://script.google.com/macros/s/AKfycbxxEGzyVqbwB0_pl0pgYYUP3jcGMCXbN_fj-aRGwPpIJkjJv_lwO6ZQ6U4CHFKe1DUm/exec"></iframe>
@@ -235,10 +217,8 @@
   <script>
     function switchTab(tabId, btnElement) {
       document.getElementById('welcome-msg').style.display = 'none';
-      
       document.querySelectorAll('iframe').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('button').forEach(el => el.classList.remove('active'));
-      
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
     }
