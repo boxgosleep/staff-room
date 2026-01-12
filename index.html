@@ -42,6 +42,7 @@
       z-index: 9999;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       transition: opacity 0.5s ease;
+      /* 預設是可以看見的，但我們會用 JS 瞬間隱藏它 */
     }
     .login-box {
       background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px);
@@ -55,27 +56,16 @@
       width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
       color: #fff; font-size: 16px; text-align: center; outline: none; font-family: 'Zen Maru Gothic', sans-serif;
-      box-sizing: border-box; /* 確保 padding 不會撐爆寬度 */
+      box-sizing: border-box;
     }
     .login-input:focus { border-color: var(--accent-color); background: rgba(0,0,0,0.3); }
 
-    /* 👇👇👇 修正：按鈕文字絕對置中 👇👇👇 */
     .login-btn {
-      width: 100%; 
-      padding: 12px; 
-      border-radius: 12px; 
-      border: none;
+      width: 100%; padding: 12px; border-radius: 12px; border: none;
       background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-      color: #5a4a6e; 
-      font-weight: bold; 
-      cursor: pointer; 
-      font-size: 16px; 
-      transition: 0.3s;
+      color: #5a4a6e; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s;
       font-family: 'Zen Maru Gothic', sans-serif;
-      /* 這裡是用來置中的魔法 */
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
     }
     .login-btn:active { transform: scale(0.95); }
     .error-msg { color: #ff6b6b; font-size: 14px; margin-top: 10px; display: none; }
@@ -171,6 +161,13 @@
     </div>
   </div>
 
+  <script>
+    // 立即檢查：如果已經有通行證，直接把遮罩隱藏
+    // 這樣在瀏覽器還沒把遮罩「畫出來」之前，它就被我們藏起來了，所以不會閃爍！
+    if (localStorage.getItem('staffRoomAccess') === 'granted') {
+      document.getElementById('login-overlay').style.display = 'none';
+    }
+  </script>
   <div class="sidebar">
     <div class="logo">
       <i class="fa-solid fa-moon"></i>
@@ -205,16 +202,8 @@
   </div>
 
   <script>
-    // 🔑 記得在這裡設定你的密碼
-    const STAFF_PASSWORD = "psdls"; 
-
-    // 🚀 一進來先檢查：有沒有「通行證」？
-    window.onload = function() {
-      if (localStorage.getItem('staffRoomAccess') === 'granted') {
-        // 有通行證，直接隱藏遮罩 (為了不讓畫面閃爍，直接設 display: none)
-        document.getElementById('login-overlay').style.display = 'none';
-      }
-    };
+    // 🔑 密碼設定
+    const STAFF_PASSWORD = "1234"; 
 
     function checkPassword() {
       const input = document.getElementById('passwordInput').value;
@@ -222,15 +211,10 @@
       const overlay = document.getElementById('login-overlay');
 
       if (input === STAFF_PASSWORD) {
-        // 密碼正確！
-        // 1. 發一張通行證存到瀏覽器裡 (下次就不用輸了)
         localStorage.setItem('staffRoomAccess', 'granted');
-        
-        // 2. 淡出遮罩
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 500);
       } else {
-        // 密碼錯誤
         errorMsg.style.display = 'block';
         document.querySelector('.login-box').animate([
           { transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(10px)' }, { transform: 'translateX(0)' }
