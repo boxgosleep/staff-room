@@ -1,89 +1,218 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 箱庭入夢員工室</title>
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2919/2919600.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>📦 箱庭入夢員工室</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2919/2919600.png">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-  /* === 這裡決定網頁長什麼樣子 (CSS) === */
-  body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; color: #eee; font-family: "Microsoft JhengHei", sans-serif; overflow: hidden; }
-  
-  /* 左側選單欄 */
-  .sidebar {
-    width: 220px;
-    background: #252526; /* 深灰色背景 */
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    border-right: 1px solid #333;
-    z-index: 10;
-  }
-  
-  .logo { 
-    font-size: 22px; 
-    font-weight: bold; 
-    margin-bottom: 40px; 
-    color: #ffd700; /* 金色標題 */
-    text-align: center;
-    letter-spacing: 2px;
-  }
-  
-  /* 按鈕樣式 */
-  button {
-    background: transparent;
-    border: none;
-    color: #aaa;
-    padding: 15px 20px;
-    text-align: left;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-  }
-  
-  button:hover { background: #333; color: white; }
-  button.active { background: #3e3e42; color: #fff; font-weight: bold; border-left: 4px solid #ffd700;}
-  
-  /* 右側全螢幕顯示區 */
-  .main-screen { flex-grow: 1; position: relative; background: #1e1e1e; }
-  
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none; /* 預設隱藏 */
-  }
-  
-  /* 歡迎畫面 */
-  .welcome {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #666;
-  }
-  
-  iframe.active { display: block; }
-</style>
+  <style>
+    :root {
+      /* === 色票定義 === */
+      --bg-dark: #0f0f13;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-main: #e0e0e0;
+      --text-muted: #888;
+      --accent-color: #ffb74d; /* 溫暖的琥珀金 */
+      --sidebar-width: 240px;
+    }
+
+    /* === 全局設定 === */
+    body { 
+      margin: 0; 
+      display: flex; 
+      height: 100vh; 
+      /* 背景：深邃的星空漸層 */
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(30, 30, 45, 1) 0%, rgba(0, 0, 0, 0) 50%),
+        radial-gradient(circle at 85% 30%, rgba(45, 30, 35, 0.4) 0%, rgba(0, 0, 0, 0) 60%);
+      color: var(--text-main); 
+      font-family: 'Noto Sans TC', sans-serif; 
+      overflow: hidden; 
+    }
+    
+    /* === 左側玻璃選單欄 === */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px); /* 磨砂玻璃效果 */
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      padding: 30px 15px;
+      border-right: 1px solid var(--glass-border);
+      z-index: 10;
+      box-shadow: 5px 0 30px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+    
+    /* Logo 區域 */
+    .logo { 
+      font-family: 'Zen Maru Gothic', sans-serif; /* 圓體字，比較可愛夢幻 */
+      font-size: 24px; 
+      margin-bottom: 50px; 
+      color: var(--accent-color); 
+      text-align: center;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(255, 183, 77, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* === 按鈕樣式 === */
+    button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 16px 20px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 500;
+    }
+    
+    button i {
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    /* 滑鼠懸停效果 */
+    button:hover { 
+      background: rgba(255, 255, 255, 0.05); 
+      color: #fff; 
+      transform: translateX(5px); /* 微微向右移動 */
+    }
+
+    button:hover i { color: var(--accent-color); }
+
+    /* 選中狀態 */
+    button.active { 
+      background: rgba(255, 183, 77, 0.15); 
+      color: #fff; 
+      font-weight: bold; 
+      box-shadow: 0 0 15px rgba(255, 183, 77, 0.05);
+    }
+
+    button.active i { color: var(--accent-color); }
+
+    /* 選中時左邊的發光條 */
+    button.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: var(--accent-color);
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 10px var(--accent-color);
+    }
+    
+    /* === 右側全螢幕顯示區 === */
+    .main-screen { 
+      flex-grow: 1; 
+      position: relative; 
+      /* 這裡不用背景色，讓它透出 body 的星空 */
+    }
+    
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none; /* 預設隱藏 */
+      animation: fadeIn 0.5s ease; /* 切換時淡入 */
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+    
+    /* === 歡迎畫面 === */
+    .welcome {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      user-select: none;
+    }
+    
+    .welcome h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      margin: 0;
+      letter-spacing: 5px;
+      color: rgba(255,255,255,0.8);
+      text-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+    
+    .welcome p {
+      font-size: 1rem;
+      letter-spacing: 2px;
+      margin-top: 10px;
+      opacity: 0.6;
+    }
+
+    iframe.active { display: block; }
+    
+    /* RWD 手機版適配 (選單變小圖示) */
+    @media (max-width: 768px) {
+      :root { --sidebar-width: 70px; }
+      .logo span, button span { display: none; } /* 隱藏文字 */
+      .logo { font-size: 20px; }
+      button { justify-content: center; padding: 15px 0; }
+      button:hover { transform: none; background: rgba(255,255,255,0.1); }
+      button i { margin: 0; font-size: 20px; }
+      .welcome h1 { font-size: 2rem; }
+    }
+  </style>
 </head>
 <body>
 
   <div class="sidebar">
-    <div class="logo">📦 員工室</div>
-    <button onclick="switchTab('plurk', this)">📢 發噗放送局</button>
-    <button onclick="switchTab('ship', this)">📦 發貨轉運站</button>
-    <button onclick="switchTab('point', this)">💳 集點管理處</button>
+    <div class="logo">
+      <i class="fa-solid fa-cube"></i>
+      <span>員工室</span>
+    </div>
+    
+    <button onclick="switchTab('plurk', this)">
+      <i class="fa-solid fa-bullhorn"></i>
+      <span>發噗放送局</span>
+    </button>
+    
+    <button onclick="switchTab('ship', this)">
+      <i class="fa-solid fa-truck-fast"></i>
+      <span>發貨轉運站</span>
+    </button>
+    
+    <button onclick="switchTab('point', this)">
+      <i class="fa-solid fa-address-card"></i>
+      <span>集點管理處</span>
+    </button>
   </div>
 
   <div class="main-screen">
     <div id="welcome-msg" class="welcome">
-      <h1>歡迎入夢</h1>
-      <p>請選擇左側功能開始作業</p>
+      <h1>箱庭入夢</h1>
+      <p>STAFF ONLY AREA</p>
     </div>
 
     <iframe id="plurk" src="https://script.google.com/macros/s/AKfycbxxEGzyVqbwB0_pl0pgYYUP3jcGMCXbN_fj-aRGwPpIJkjJv_lwO6ZQ6U4CHFKe1DUm/exec"></iframe>
@@ -93,13 +222,14 @@
 
   <script>
     function switchTab(tabId, btnElement) {
+      // 隱藏歡迎文字
       document.getElementById('welcome-msg').style.display = 'none';
       
-      // 重置所有狀態
+      // 1. 移除所有 active 狀態
       document.querySelectorAll('iframe').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('button').forEach(el => el.classList.remove('active'));
       
-      // 啟動選中的項目
+      // 2. 加上 active 狀態
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
     }
@@ -107,5 +237,3 @@
 
 </body>
 </html>
-
-<meta name="robots" content="noindex, nofollow">
