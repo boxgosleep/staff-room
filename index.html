@@ -144,7 +144,15 @@
       button.nav-item i { font-size: 20px; margin-bottom: 2px; width: auto; }
       button.nav-item.active { color: var(--accent-color); background: transparent; }
       button.nav-item.active i { transform: translateY(-3px); color: var(--accent-color); text-shadow: 0 0 10px rgba(255,154,158,0.6); }
-      .main-screen { width: 100%; height: calc(100vh - var(--bottom-nav-height)); }
+      /* 手機版主畫面調整 */
+      .main-screen {
+        width: 100%;
+        /* 舊的寫法：height: calc(100vh - var(--bottom-nav-height)); */
+        /* 👇 改成這樣：讓 iframe 佔滿高度，但下面留白給導航列 */
+        height: 100vh; 
+        padding-bottom: var(--bottom-nav-height); /* 👈 關鍵！把底部空間讓出來 */
+        box-sizing: border-box; /* 確保 padding 不會讓寬度爆掉 */
+      }
       .welcome h1 { font-size: 2rem; }
     }
   </style>
