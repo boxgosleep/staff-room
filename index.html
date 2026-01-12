@@ -50,17 +50,32 @@
     }
     .login-icon { font-size: 50px; margin-bottom: 20px; text-shadow: 0 0 20px rgba(255,154,158,0.5); animation: float 3s ease-in-out infinite; }
     .login-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #fff; }
+    
     .login-input {
       width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
       color: #fff; font-size: 16px; text-align: center; outline: none; font-family: 'Zen Maru Gothic', sans-serif;
+      box-sizing: border-box; /* 確保 padding 不會撐爆寬度 */
     }
     .login-input:focus { border-color: var(--accent-color); background: rgba(0,0,0,0.3); }
+
+    /* 👇👇👇 修正：按鈕文字絕對置中 👇👇👇 */
     .login-btn {
-      width: 100%; padding: 12px; border-radius: 12px; border: none;
+      width: 100%; 
+      padding: 12px; 
+      border-radius: 12px; 
+      border: none;
       background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-      color: #5a4a6e; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s;
+      color: #5a4a6e; 
+      font-weight: bold; 
+      cursor: pointer; 
+      font-size: 16px; 
+      transition: 0.3s;
       font-family: 'Zen Maru Gothic', sans-serif;
+      /* 這裡是用來置中的魔法 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .login-btn:active { transform: scale(0.95); }
     .error-msg { color: #ff6b6b; font-size: 14px; margin-top: 10px; display: none; }
@@ -95,7 +110,7 @@
     }
     button.nav-item.active i { transform: rotate(-10deg); color: #fff; text-shadow: 0 0 5px var(--accent-color); }
 
-    /* === 主畫面 (夢幻文字特效區) === */
+    /* === 主畫面 === */
     .main-screen { flex-grow: 1; position: relative; }
     iframe { width: 100%; height: 100%; border: none; display: none; }
     
@@ -104,51 +119,24 @@
       text-align: center; color: rgba(255,255,255,0.8);
       width: 100%;
     }
-    
-    /* 👇👇👇 重點：夢幻發光文字特效 👇👇👇 */
     .welcome h1 { 
-      font-size: 3rem; 
-      margin: 0; 
-      color: #fff;
-      font-weight: 900;
-      letter-spacing: 4px; /* 字距拉開更有電影感 */
-      
-      /* 多層陰影製造光暈 */
-      text-shadow: 
-        0 0 10px #ff9a9e, 
-        0 0 20px #ff9a9e, 
-        0 0 40px #ff758c, 
-        0 0 80px #ff758c;
-      
-      /* 呼吸動畫 */
+      font-size: 3rem; margin: 0; color: #fff; font-weight: 900; letter-spacing: 4px;
+      text-shadow: 0 0 10px #ff9a9e, 0 0 20px #ff9a9e, 0 0 40px #ff758c, 0 0 80px #ff758c;
       animation: glow-pulse 3s ease-in-out infinite alternate;
     }
-    
     .welcome p {
-      font-size: 1.2rem;
-      margin-top: 15px;
-      color: #ffcfe0; /* 淡粉色文字 */
-      text-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
-      letter-spacing: 2px;
-      opacity: 0.8;
+      font-size: 1.2rem; margin-top: 15px; color: #ffcfe0;
+      text-shadow: 0 0 10px rgba(255, 154, 158, 0.5); letter-spacing: 2px; opacity: 0.8;
     }
 
-    /* 光暈呼吸動畫 */
     @keyframes glow-pulse {
       from { text-shadow: 0 0 10px #ff9a9e, 0 0 20px #ff9a9e; opacity: 0.9; }
       to { text-shadow: 0 0 20px #ff9a9e, 0 0 30px #ff758c, 0 0 50px #ff758c; opacity: 1; }
     }
-    
-    /* 浮動動畫 (給 icon 用) */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    /* 👆👆👆 特效結束 👆👆👆 */
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     iframe.active { display: block; }
     
-    /* === 手機版調整 === */
     @media (max-width: 768px) {
       body { flex-direction: column; } 
       .sidebar {
@@ -167,7 +155,7 @@
       button.nav-item.active { color: var(--accent-color); background: transparent; }
       button.nav-item.active i { transform: translateY(-3px); color: var(--accent-color); text-shadow: 0 0 10px rgba(255,154,158,0.6); }
       .main-screen { width: 100%; height: calc(100vh - var(--bottom-nav-height)); }
-      .welcome h1 { font-size: 2rem; } /* 手機字小一點 */
+      .welcome h1 { font-size: 2rem; }
     }
   </style>
 </head>
@@ -217,8 +205,16 @@
   </div>
 
   <script>
-    // 🔑 記得改這裡的密碼！
+    // 🔑 記得在這裡設定你的密碼
     const STAFF_PASSWORD = "psdls"; 
+
+    // 🚀 一進來先檢查：有沒有「通行證」？
+    window.onload = function() {
+      if (localStorage.getItem('staffRoomAccess') === 'granted') {
+        // 有通行證，直接隱藏遮罩 (為了不讓畫面閃爍，直接設 display: none)
+        document.getElementById('login-overlay').style.display = 'none';
+      }
+    };
 
     function checkPassword() {
       const input = document.getElementById('passwordInput').value;
@@ -226,9 +222,15 @@
       const overlay = document.getElementById('login-overlay');
 
       if (input === STAFF_PASSWORD) {
+        // 密碼正確！
+        // 1. 發一張通行證存到瀏覽器裡 (下次就不用輸了)
+        localStorage.setItem('staffRoomAccess', 'granted');
+        
+        // 2. 淡出遮罩
         overlay.style.opacity = '0';
         setTimeout(() => { overlay.style.display = 'none'; }, 500);
       } else {
+        // 密碼錯誤
         errorMsg.style.display = 'block';
         document.querySelector('.login-box').animate([
           { transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(10px)' }, { transform: 'translateX(0)' }
