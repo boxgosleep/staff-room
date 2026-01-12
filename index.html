@@ -7,7 +7,7 @@
   
   <title>🌙 箱庭入夢 ✶ 員工室</title>
   
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2285%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🌙</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2285%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🌙</text></svg>">
   
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,20 +15,12 @@
   <style>
     :root {
       /* === 🌙 深夜夢境配色 (護眼版) === */
-      /* 背景：深邃的午夜紫 -> 夢幻靛藍 */
       --bg-gradient: linear-gradient(135deg, #241b35 0%, #4a3b69 100%);
-      
-      /* 玻璃：改用深色半透明，不再是亮白 */
       --glass-bg: rgba(0, 0, 0, 0.3);
       --glass-border: rgba(255, 255, 255, 0.1);
-      
-      /* 文字：柔和的灰白 */
       --text-main: #e0dbe6; 
       --text-muted: #9f96ad;
-      
-      /* 強調色：螢光粉/蜜桃色 (保留可愛感) */
       --accent-color: #ff9a9e; 
-      
       --sidebar-width: 240px;
       --bottom-nav-height: 70px;
     }
@@ -63,7 +55,7 @@
       margin-bottom: 40px; 
       color: #fff; 
       text-align: center;
-      text-shadow: 0 0 10px rgba(255, 154, 158, 0.5); /* 微光效果 */
+      text-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -89,21 +81,30 @@
       font-weight: 700;
     }
     
-    button i { font-size: 20px; transition: 0.3s; }
+    /* 👇👇👇 重點修改在這裡！ 👇👇👇 */
+    button i { 
+      font-size: 20px; 
+      transition: 0.3s;
+      /* 強制設定圖示寬度，並讓圖示置中 */
+      width: 28px; 
+      text-align: center; 
+      display: inline-block;
+    }
+    /* 👆👆👆 這樣大家就會對齊了 👆👆👆 */
 
     /* 滑鼠懸停 */
     button:hover { 
-      background: rgba(255, 255, 255, 0.08); /* 微微打亮 */
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
       transform: scale(1.05);
     }
 
     /* 選中狀態 */
     button.active { 
-      background: rgba(255, 154, 158, 0.15); /* 淡粉色背景 */
+      background: rgba(255, 154, 158, 0.15);
       color: var(--accent-color); 
       box-shadow: 0 0 15px rgba(255, 154, 158, 0.1);
-      border: 1px solid rgba(255, 154, 158, 0.3); /* 加個細邊框增加精緻感 */
+      border: 1px solid rgba(255, 154, 158, 0.3);
     }
 
     button.active i { transform: rotate(-10deg); color: #fff; text-shadow: 0 0 5px var(--accent-color); }
@@ -112,7 +113,6 @@
     .main-screen { 
       flex-grow: 1; 
       position: relative; 
-      /* 讓背景透出來，不另外加色塊 */
     }
     
     iframe {
@@ -145,7 +145,7 @@
         align-items: center;
         border-right: none;
         border-top: 1px solid var(--glass-border);
-        background: rgba(30, 20, 40, 0.9); /* 手機底部深色不透光一點 */
+        background: rgba(30, 20, 40, 0.9);
       }
 
       .logo { display: none; }
@@ -164,7 +164,11 @@
         width: 100%;
       }
 
-      button i { font-size: 20px; margin-bottom: 2px; }
+      button i { 
+        font-size: 20px; 
+        margin-bottom: 2px;
+        width: auto; /* 手機版不需要強制寬度，因為是上下排 */
+      }
 
       button.active {
         color: var(--accent-color);
@@ -190,7 +194,7 @@
     
     <button onclick="switchTab('plurk', this)">
       <i class="fa-solid fa-bullhorn"></i>
-      <span> 發噗</span>
+      <span>發噗</span>
     </button>
     
     <button onclick="switchTab('ship', this)">
@@ -200,7 +204,7 @@
     
     <button onclick="switchTab('point', this)">
       <i class="fa-solid fa-address-card"></i>
-      <span> 集點</span>
+      <span>集點</span>
     </button>
   </div>
 
@@ -225,7 +229,5 @@
     }
   </script>
 
-</body>
-</html>
 </body>
 </html>
