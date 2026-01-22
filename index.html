@@ -22,7 +22,7 @@
       --text-muted: #9f96ad;
       --accent-color: #ff9a9e; 
       --sidebar-width: 240px;
-      --bottom-nav-height: 70px;
+      --bottom-nav-height: 80px; /* 手機版導航稍微加高一點點，讓空間更舒服 */
     }
 
     body { 
@@ -128,7 +128,7 @@
 
     iframe.active { display: block; }
     
-    /* === 📱 手機版專用設定 === */
+    /* === 📱 手機版專用設定 (修復跑版問題) === */
     @media (max-width: 768px) {
       body { flex-direction: column; } 
       
@@ -137,13 +137,15 @@
         bottom: 0; 
         left: 0; 
         width: 100%; 
+        /* 這裡的高度計算改得更穩健 */
         height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
         padding-bottom: env(safe-area-inset-bottom);
         
         flex-direction: row; 
-        padding-left: 0; padding-right: 0; 
-        justify-content: space-around; 
-        align-items: center;
+        padding-left: 0; padding-right: 0; padding-top: 0;
+        justify-content: space-evenly; /* 讓按鈕平均分佈 */
+        align-items: center; /* 垂直置中 */
+        
         border-right: none; 
         border-top: 1px solid var(--glass-border);
         background: rgba(30, 20, 40, 0.98);
@@ -153,13 +155,35 @@
       .logo { display: none; }
       
       button.nav-item {
-        flex-direction: column; padding: 5px; margin: 0; background: transparent !important;
-        color: #777; font-size: 10px; gap: 4px; border-radius: 0;
-        box-shadow: none !important; border: none !important; transform: none !important; width: 100%;
+        flex-direction: column; 
+        /* 強制按鈕內容垂直置中 */
+        justify-content: center;
+        align-items: center;
+        
+        padding: 0; margin: 0; 
+        background: transparent !important;
+        color: #777; 
+        font-size: 11px; /* 字稍微大一點點 */
+        gap: 6px; 
+        border-radius: 0;
+        box-shadow: none !important; border: none !important; transform: none !important; 
+        width: 100%;
+        height: 100%; /* 吃滿父層高度 */
       }
-      button.nav-item i { font-size: 20px; margin-bottom: 2px; width: auto; }
+      
+      button.nav-item i { 
+        font-size: 22px; 
+        margin-bottom: 0; 
+        width: auto; 
+        display: block; /* 確保 icon 是區塊元素 */
+      }
+      
       button.nav-item.active { color: var(--accent-color); background: transparent; }
-      button.nav-item.active i { transform: translateY(-3px); color: var(--accent-color); text-shadow: 0 0 10px rgba(255,154,158,0.6); }
+      button.nav-item.active i { 
+        transform: translateY(-5px); /* 點選時往上浮一點點 */
+        color: var(--accent-color); 
+        text-shadow: 0 0 10px rgba(255,154,158,0.6); 
+      }
       
       .main-screen {
         position: fixed;
@@ -209,6 +233,11 @@
       <i class="fa-solid fa-bullhorn"></i>
       <span>發噗</span>
     </button>
+
+    <button class="nav-item" onclick="switchTab('private-helper', this)">
+      <i class="fa-solid fa-comment-dots"></i>
+      <span>私噗</span>
+    </button>
     
     <button class="nav-item" onclick="switchTab('ship', this)">
       <i class="fa-solid fa-truck-fast"></i>
@@ -233,6 +262,9 @@
     </div>
 
     <iframe id="plurk" src="https://script.google.com/macros/s/AKfycbxxEGzyVqbwB0_pl0pgYYUP3jcGMCXbN_fj-aRGwPpIJkjJv_lwO6ZQ6U4CHFKe1DUm/exec"></iframe>
+
+    <iframe id="private-helper" src="https://script.google.com/macros/s/AKfycbyzMBYa4UD4seOdUhGEATpgAp-qyuIkO322wHvtFURn9Sdqy-VxCwJUG9MzeyXZoVdM/exec"></iframe>
+
     <iframe id="ship" src="https://script.google.com/macros/s/AKfycbzBZjTBh6MqsPMczBUgnqg-wcPJSoFXtQcd_0PxZNzVJJQhPb3LuLdgRqWi7qbcnagR/exec?key=psdls"></iframe>
     <iframe id="point" src="https://script.google.com/macros/s/AKfycbw-TrivYkr38qQtT3ha5Z4m9xdLveQY19dYZeWPK7fMgbePrUqWAdu-fQCHRI1Vq38-kw/exec"></iframe>
     
