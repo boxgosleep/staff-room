@@ -22,14 +22,13 @@
       --text-muted: #9f96ad;
       --accent-color: #ff9a9e; 
       --sidebar-width: 240px;
-      --bottom-nav-height: 80px; /* 手機版導航稍微加高一點點，讓空間更舒服 */
+      --bottom-nav-height: 80px; 
     }
 
     body { 
       margin: 0; 
       display: flex; 
       height: 100vh; 
-      /* 使用 dvh (Dynamic Viewport Height) 解決手機網址列伸縮問題 */
       height: 100dvh; 
       background-image: var(--bg-gradient);
       color: var(--text-main); 
@@ -253,6 +252,11 @@
       <i class="fa-solid fa-calculator"></i>
       <span>試算</span>
     </button>
+
+    <button class="nav-item" onclick="switchTab('receipt-app', this)">
+      <i class="fa-solid fa-scroll"></i>
+      <span>手帳</span>
+    </button>
   </div>
 
   <div class="main-screen">
@@ -269,6 +273,8 @@
     <iframe id="point" src="https://script.google.com/macros/s/AKfycbw-TrivYkr38qQtT3ha5Z4m9xdLveQY19dYZeWPK7fMgbePrUqWAdu-fQCHRI1Vq38-kw/exec"></iframe>
     
     <iframe id="paypal" src="https://boxgosleep.github.io/paypal-calc/"></iframe>
+
+    <iframe id="receipt-app" src="https://boxgosleep.github.io/Receipt/"></iframe>
   </div>
 
   <script>
