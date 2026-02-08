@@ -70,7 +70,7 @@
     .login-btn:active { transform: scale(0.95); }
     .error-msg { color: #ff6b6b; font-size: 14px; margin-top: 10px; display: none; }
 
-    /* === 導航選單 (電腦版) === */
+    /* === 導航選單 (通用樣式) === */
     .sidebar {
       width: var(--sidebar-width);
       background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -100,7 +100,16 @@
     }
     button.nav-item.active i { transform: rotate(-10deg); color: #fff; text-shadow: 0 0 5px var(--accent-color); }
 
-    /* === 主畫面 (電腦版) === */
+    /* 電腦版隱藏 "更多" 按鈕 */
+    .mobile-more-btn { display: none !important; }
+    
+    /* 電腦版："額外選單" 直接顯示在列表中，不隱藏 */
+    .extra-menu-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* === 主畫面 === */
     .main-screen { flex-grow: 1; position: relative; }
     iframe { width: 100%; height: 100%; border: none; display: none; }
     
@@ -118,88 +127,90 @@
       font-size: 1.2rem; margin-top: 15px; color: #ffcfe0;
       text-shadow: 0 0 10px rgba(255, 154, 158, 0.5); letter-spacing: 2px; opacity: 0.8;
     }
-
     @keyframes glow-pulse {
       from { text-shadow: 0 0 10px #ff9a9e, 0 0 20px #ff9a9e; opacity: 0.9; }
       to { text-shadow: 0 0 20px #ff9a9e, 0 0 30px #ff758c, 0 0 50px #ff758c; opacity: 1; }
     }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
     iframe.active { display: block; }
     
-    /* === 📱 手機版專用設定 (修復跑版問題) === */
+    /* === 📱 手機版專用設定 === */
     @media (max-width: 768px) {
       body { flex-direction: column; } 
       
       .sidebar {
-        position: fixed; 
-        bottom: 0; 
-        left: 0; 
-        width: 100%; 
-        /* 這裡的高度計算改得更穩健 */
+        position: fixed; bottom: 0; left: 0; width: 100%; 
         height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
         padding-bottom: env(safe-area-inset-bottom);
         
         flex-direction: row; 
         padding-left: 0; padding-right: 0; padding-top: 0;
-        justify-content: space-evenly; /* 讓按鈕平均分佈 */
-        align-items: center; /* 垂直置中 */
+        justify-content: space-evenly; 
+        align-items: center; 
         
-        border-right: none; 
-        border-top: 1px solid var(--glass-border);
+        border-right: none; border-top: 1px solid var(--glass-border);
         background: rgba(30, 20, 40, 0.98);
         box-sizing: border-box;
       }
       
       .logo { display: none; }
       
+      /* 手機版：顯示 "更多" 按鈕 */
+      .mobile-more-btn { display: flex !important; }
+
+      /* 手機版：將 "額外選單" 變成彈出式視窗 */
+      .extra-menu-container {
+        display: none; /* 預設隱藏 */
+        position: fixed;
+        bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom) + 10px);
+        right: 10px;
+        background: rgba(40, 30, 50, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 10px;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        z-index: 200;
+        min-width: 120px;
+        animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .extra-menu-container.show { display: flex; }
+
+      @keyframes popUp {
+        from { opacity: 0; transform: translateY(20px) scale(0.9); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      
       button.nav-item {
-        flex-direction: column; 
-        /* 強制按鈕內容垂直置中 */
-        justify-content: center;
-        align-items: center;
-        
-        padding: 0; margin: 0; 
-        background: transparent !important;
-        color: #777; 
-        font-size: 11px; /* 字稍微大一點點 */
-        gap: 6px; 
-        border-radius: 0;
-        box-shadow: none !important; border: none !important; transform: none !important; 
+        flex-direction: column; justify-content: center; align-items: center;
+        padding: 0; margin: 0; background: transparent !important;
+        color: #777; font-size: 11px; gap: 6px; 
+        border-radius: 0; box-shadow: none !important; border: none !important; transform: none !important; 
+        width: 100%; height: 100%;
+      }
+      
+      /* 讓彈出選單裡的按鈕恢復成橫向排列，比較好看 */
+      .extra-menu-container button.nav-item {
+        flex-direction: row;
+        justify-content: flex-start;
         width: 100%;
-        height: 100%; /* 吃滿父層高度 */
+        padding: 12px 15px;
+        font-size: 14px;
+        color: #ddd;
+        border-radius: 10px;
+        margin-bottom: 5px;
       }
+      .extra-menu-container button.nav-item i { margin-right: 5px; font-size: 18px; width: 24px; }
       
-      button.nav-item i { 
-        font-size: 22px; 
-        margin-bottom: 0; 
-        width: auto; 
-        display: block; /* 確保 icon 是區塊元素 */
-      }
-      
+      button.nav-item i { font-size: 22px; margin-bottom: 0; width: auto; display: block; }
       button.nav-item.active { color: var(--accent-color); background: transparent; }
-      button.nav-item.active i { 
-        transform: translateY(-5px); /* 點選時往上浮一點點 */
-        color: var(--accent-color); 
-        text-shadow: 0 0 10px rgba(255,154,158,0.6); 
-      }
+      button.nav-item.active i { transform: translateY(-5px); color: var(--accent-color); text-shadow: 0 0 10px rgba(255,154,158,0.6); }
       
       .main-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
+        position: fixed; top: 0; left: 0; width: 100%;
         height: calc(100dvh - (var(--bottom-nav-height) + env(safe-area-inset-bottom)));
         padding-bottom: 0;
       }
-
-      iframe {
-        width: 100%;
-        height: 100%; 
-        display: none;
-      }
-      iframe.active { display: block; }
-
       .welcome h1 { font-size: 2rem; }
     }
   </style>
@@ -238,25 +249,32 @@
       <span>私噗</span>
     </button>
     
-    <button class="nav-item" onclick="switchTab('ship', this)">
-      <i class="fa-solid fa-truck-fast"></i>
-      <span>發貨</span>
-    </button>
-    
     <button class="nav-item" onclick="switchTab('point', this)">
       <i class="fa-solid fa-address-card"></i>
       <span>集點</span>
     </button>
 
-    <button class="nav-item" onclick="switchTab('paypal', this)">
-      <i class="fa-solid fa-calculator"></i>
-      <span>試算</span>
+    <button class="nav-item" onclick="switchTab('ship', this)">
+      <i class="fa-solid fa-truck-fast"></i>
+      <span>發貨</span>
+    </button>
+    
+    <button class="nav-item mobile-more-btn" onclick="toggleMenu()">
+      <i class="fa-solid fa-ellipsis"></i>
+      <span>更多</span>
     </button>
 
-    <button class="nav-item" onclick="switchTab('receipt-app', this)">
-      <i class="fa-solid fa-scroll"></i>
-      <span>手帳</span>
-    </button>
+    <div id="extra-menu" class="extra-menu-container">
+      <button class="nav-item" onclick="switchTab('paypal', this)">
+        <i class="fa-solid fa-calculator"></i>
+        <span>試算</span>
+      </button>
+
+      <button class="nav-item" onclick="switchTab('receipt-app', this)">
+        <i class="fa-solid fa-scroll"></i>
+        <span>手帳</span>
+      </button>
+    </div>
   </div>
 
   <div class="main-screen">
@@ -266,14 +284,10 @@
     </div>
 
     <iframe id="plurk" src="https://script.google.com/macros/s/AKfycbxxEGzyVqbwB0_pl0pgYYUP3jcGMCXbN_fj-aRGwPpIJkjJv_lwO6ZQ6U4CHFKe1DUm/exec"></iframe>
-
     <iframe id="private-helper" src="https://script.google.com/macros/s/AKfycbyzMBYa4UD4seOdUhGEATpgAp-qyuIkO322wHvtFURn9Sdqy-VxCwJUG9MzeyXZoVdM/exec"></iframe>
-
-    <iframe id="ship" src="https://script.google.com/macros/s/AKfycbzBZjTBh6MqsPMczBUgnqg-wcPJSoFXtQcd_0PxZNzVJJQhPb3LuLdgRqWi7qbcnagR/exec?key=psdls"></iframe>
     <iframe id="point" src="https://script.google.com/macros/s/AKfycbw-TrivYkr38qQtT3ha5Z4m9xdLveQY19dYZeWPK7fMgbePrUqWAdu-fQCHRI1Vq38-kw/exec"></iframe>
-    
+    <iframe id="ship" src="https://script.google.com/macros/s/AKfycbzBZjTBh6MqsPMczBUgnqg-wcPJSoFXtQcd_0PxZNzVJJQhPb3LuLdgRqWi7qbcnagR/exec?key=psdls"></iframe>
     <iframe id="paypal" src="https://boxgosleep.github.io/paypal-calc/"></iframe>
-
     <iframe id="receipt-app" src="https://boxgosleep.github.io/Receipt/"></iframe>
   </div>
 
@@ -301,13 +315,41 @@
       if (e.key === 'Enter') checkPassword();
     });
 
+    // 切換分頁
     function switchTab(tabId, btnElement) {
       document.getElementById('welcome-msg').style.display = 'none';
+      
+      // 隱藏所有 iframe
       document.querySelectorAll('iframe').forEach(el => el.classList.remove('active'));
+      // 移除所有按鈕 active 狀態
       document.querySelectorAll('button.nav-item').forEach(el => el.classList.remove('active'));
+      
+      // 顯示目標 iframe 和按鈕 active
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
+
+      // 📱 手機版：點擊按鈕後，如果選單是開著的，就自動關閉
+      const menu = document.getElementById('extra-menu');
+      if (menu.classList.contains('show')) {
+        menu.classList.remove('show');
+      }
     }
+
+    // 📱 手機版：切換 "更多" 選單開關
+    function toggleMenu() {
+      const menu = document.getElementById('extra-menu');
+      menu.classList.toggle('show');
+    }
+    
+    // 點擊畫面其他地方關閉選單
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('extra-menu');
+      const moreBtn = document.querySelector('.mobile-more-btn');
+      
+      if (!menu.contains(event.target) && !moreBtn.contains(event.target) && menu.classList.contains('show')) {
+        menu.classList.remove('show');
+      }
+    });
   </script>
 
 </body>
